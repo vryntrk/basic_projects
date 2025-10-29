@@ -19,8 +19,8 @@ car_height = 200
 car_vel = 8
 car = pygame.transform.scale(pygame.image.load("car.png"), (car_width, car_height))
 car_coordinate = car.get_rect()
-car_coordinate.x = int((width-car_width)/2)
-car_coordinate.y = height-car_height
+car_coordinate.x = (width - car_width) // 2
+car_coordinate.y = height - car_height
 
 enemy_width = 100
 enemy_height = 200
@@ -90,13 +90,13 @@ def main():
     brokens = []
 
     start_time = time.time()
-    elapsed_time = 0
 
     hit = False
 
     while run:
-        enemy_count += clock.tick(120)
-        broken_count += clock.tick(120)
+        dt = clock.tick(120)
+        enemy_count += dt
+        broken_count += dt
 
         elapsed_time = time.time() - start_time
 
@@ -107,7 +107,7 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and car_coordinate.left > 0:
             car_coordinate.x -= car_vel
-        elif keys[pygame.K_RIGHT] and car_coordinate.right < width:
+        if keys[pygame.K_RIGHT] and car_coordinate.right < width:
             car_coordinate.x += car_vel
 
         if enemy_count > enemy_add_increment:
