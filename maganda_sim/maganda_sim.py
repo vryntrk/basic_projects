@@ -36,9 +36,14 @@ broken_coordinate = broken.get_rect()
 
 font = pygame.font.SysFont("comic sans", 32)
 
+crash_sound = pygame.mixer.Sound("crash.mp3")
+pygame.mixer.music.load("background.mp3")
+pygame.mixer.music.play(-1, 0.0)
+
 
 def draw(enemies, brokens, elapsed_time):
     win.blit(background, (0, 0))
+
     win.blit(car, car_coordinate)
 
     for e in enemies:
@@ -141,6 +146,9 @@ def main():
                 hit = True
 
         if hit:
+            pygame.mixer.music.stop()
+            crash_sound.play()
+            pygame.time.delay(150)
             game_over = font.render("Game Over!", 1, "White")
             win.blit(game_over, ((width - game_over.get_width())/2, (height - game_over.get_height())/2))
             pygame.display.update()
