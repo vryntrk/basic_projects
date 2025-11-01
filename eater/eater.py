@@ -29,10 +29,15 @@ food_coordinate = food.get_rect()
 
 bomb_width = 50
 bomb_height = 50
-bomb = pygame.transform.scale(pygame.image.load("puffer-fish.png"), (bomb_width, bomb_height))
+bomb = pygame.transform.scale(pygame.image.load("bomb.png"), (bomb_width, bomb_height))
 bomb_coordinate = bomb.get_rect()
 
 font = pygame.font.SysFont("consolas", 32)
+
+eat_sound = pygame.mixer.Sound("eat.mp3")
+damage_sound = pygame.mixer.Sound("explosion.mp3")
+pygame.mixer.music.load("background.mp3")
+pygame.mixer.music.play(-1, 0.0)
 
 
 def draw(foods, bombs, score_point, hearts):
@@ -107,6 +112,7 @@ def main():
 
         for f in foods[:]:
             if hunter_coordinate.colliderect(f[0]):
+                eat_sound.play()
                 foods.remove(f)
                 score_point += 50
             else:
@@ -127,6 +133,7 @@ def main():
             if hunter_coordinate.colliderect(b[0]):
                 bombs.remove(b)
                 hearts -= 1
+                damage_sound.play()
             else:
                 if elapsed_time - b[1] > 5:
                     bombs.remove(b)
@@ -135,6 +142,8 @@ def main():
             hit = True
 
         if hit:
+            pygame.mixer.music.stop()
+            pygame.time.delay(150)
             the_end(score_point)
             pygame.time.delay(3000)
             run = False
