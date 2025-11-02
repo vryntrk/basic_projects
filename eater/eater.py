@@ -35,17 +35,24 @@ bomb_img = pygame.image.load("bomb.png")
 bomb = pygame.transform.scale(bomb_img, (bomb_width, bomb_height))
 bomb_coordinate = bomb.get_rect()
 
+heal_width = 50
+heal_height = 50
+heal_img = pygame.image.load("heart.png")
+heal = pygame.transform.scale(heal_img, (heal_width, heal_height))
+heal_coordinate = heal.get_rect()
+
 font = pygame.font.SysFont("consolas", 32)
 
 eat_sound = pygame.mixer.Sound("eat.mp3")
 damage_sound = pygame.mixer.Sound("explosion.mp3")
 upgrade_sound = pygame.mixer.Sound("upgrade.mp3")
+heal_sound = pygame.mixer.Sound("heal.mp3")
 
 pygame.mixer.music.load("background.mp3")
 pygame.mixer.music.play(-1, 0.0)
 
 
-def draw(foods, bombs, score_point, hearts):
+def draw(foods, bombs, score_point, hearts, heal_list):
     win.blit(background, (0, 0))
     pygame.draw.line(win, "white", (0, 95), (width, 95), 5)
 
@@ -56,6 +63,9 @@ def draw(foods, bombs, score_point, hearts):
 
     for b in bombs:
         win.blit(bomb, b[0])
+
+    for h in heal_list:
+        win.blit(heal, h[0])
 
     score_text = font.render(f"Score: {score_point}", 1, "White")
     win.blit(score_text, (50, (95 - score_text.get_height()) // 2))
@@ -93,6 +103,10 @@ def main():
 
     hearts = 3
 
+    heal_count = 0
+    heal_add_increment = 1000
+    heal_list = []
+
     score_point = 0
 
     hit = False
@@ -101,6 +115,7 @@ def main():
         dt = clock.tick(120)
         food_count += dt
         bomb_count += dt
+        heal_count += dt
 
         elapsed_time = time.time()
 
@@ -160,6 +175,25 @@ def main():
                 if elapsed_time - b[1] > 5:
                     bombs.remove(b)
 
+        if hearts < 3 and heal_count > heal_add_increment:
+            for _ in range(1):
+                heal_coordinate.x = random.randint(0, width - heal_width)
+                heal_coordinate.y = random.randint(100, height - heal_height)
+                heal_rect = pygame.Rect(heal_coordinate.x, heal_coordinate.y, heal_width, heal_height)
+                new_heal = [heal_rect, time.time()]
+                heal_list.append(new_heal)
+            heal_count = 0
+            heal_add_increment = max(3500, heal_add_increment + 500)
+
+        for h in heal_list[:]:
+            if hunter_coordinate.colliderect(h[0]):
+                heal_list.remove(h)
+                hearts += 1
+                heal_sound.play()
+            else:
+                if elapsed_time - h[1] > 5 or hearts == 3:
+                    heal_list.remove(h)
+
         if hearts == 0:
             hit = True
 
@@ -180,7 +214,7 @@ def main():
         if keys[pygame.K_DOWN] and hunter_coordinate.bottom < height:
             hunter_coordinate.y += hunter_vel
 
-        draw(foods, bombs, score_point, hearts)
+        draw(foods, bombs, score_point, hearts, heal_list)
 
     pygame.quit()
 
