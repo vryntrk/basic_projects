@@ -44,9 +44,23 @@ coin_height = 20
 coin = pygame.transform.scale(pygame.image.load("coin.png"), (coin_width, coin_height))
 coin_coordinate = coin.get_rect()
 
+spacecraft_width = 150
+spacecraft_height = 150
+spacecraft_vel = 5
+spacecraft = pygame.transform.scale(pygame.image.load("spacecraft.png"), (spacecraft_width, spacecraft_height))
+spacecraft_coordinate = spacecraft.get_rect()
+
+battleship_width = 150
+battleship_height = 150
+battleship_vel = 5
+battleship = pygame.transform.scale(pygame.image.load("battleship.png"), (battleship_width, battleship_height))
+battleship_coordinate = battleship.get_rect()
+
 coin_sound = pygame.mixer.Sound("coin_receive.mp3")
 buying_sound = pygame.mixer.Sound("purchase.mp3")
 fixing_sound = pygame.mixer.Sound("fix.mp3")
+crash_sound = pygame.mixer.Sound("crash.mp3")
+drop_sound = pygame.mixer.Sound("coin_drop.mp3")
 
 pygame.mixer.music.load("background.mp3")
 pygame.mixer.music.play(-1, 0.0)
@@ -61,7 +75,13 @@ def borders(alien_rect, alien_mask):
 
 
 def happy_end():
-    end_message = font.render("CONGRATS, YOU DID IT", 1, "white")
+    end_message = font.render("CONGRATS, YOU DID IT!", 1, "white")
+    window.blit(end_message, ((width - end_message.get_width()) // 2, (height - end_message.get_height()) // 2))
+    pygame.display.update()
+
+
+def sad_end():
+    end_message = font.render("OH NO, YOU FAILED!", 1, "white")
     window.blit(end_message, ((width - end_message.get_width()) // 2, (height - end_message.get_height()) // 2))
     pygame.display.update()
 
@@ -74,7 +94,7 @@ def available():
     return selected_column
 
 
-def draw(alien_img, coins, total_coin, battery_price, required_battery):
+def draw(alien_img, coins, total_coin, battery_price, required_battery, battleships, spacecrafts):
     window.blit(background, (0, 0))
 
     pygame.draw.line(window, "white", (0, 95), (width, 95), 5)
@@ -103,6 +123,12 @@ def draw(alien_img, coins, total_coin, battery_price, required_battery):
     for c in coins:
         window.blit(coin, c[0])
 
+    for b in battleships:
+        window.blit(battleship, b)
+
+    for s in spacecrafts:
+        window.blit(spacecraft, s)
+
     pygame.display.update()
 
 
@@ -113,10 +139,20 @@ def main():
 
     angle = 0
     global alien_coordinate
+    global battleship_vel
+    global spacecraft_vel
 
     coin_add_increment = 3000
     coin_count = 0
     coins = []
+
+    battleship_add_increment = 4000
+    battleship_count = 0
+    battleships = []
+
+    spacecraft_add_increment = 4000
+    spacecraft_count = 0
+    spacecrafts = []
 
     total_coin = 0
     battery_price = 5
@@ -124,11 +160,17 @@ def main():
 
     received_battery = False
 
+    crash_count = 0
+
     while run:
         dt = clock.tick(60)
         coin_count += dt
+        battleship_count += dt
+        spacecraft_count += dt
 
         elapsed = time.time()
+
+        hit = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -200,12 +242,61 @@ def main():
                 if elapsed - c[1] > 5:
                     coins.remove(c)
 
+        if battleship_count >= battleship_add_increment:
+            for _ in range(1):
+                battleship_coordinate.x = 700
+                battleship_rect = pygame.Rect(battleship_coordinate.x, -battleship_height, battleship_width, battleship_height)
+                battleships.append(battleship_rect)
+            battleship_count = 0
+            battleship_add_increment = max(2000, battleship_add_increment - 500)
+            battleship_vel = max(8, battleship_vel + 0.25)
+
+        for b in battleships[:]:
+            b.y += battleship_vel
+            if b.y > height:
+                battleships.remove(b)
+            elif alien_coordinate.colliderect(b):
+                hit = True
+                alien_coordinate.x = 0
+                alien_coordinate.y = height - alien_height
+
+        if spacecraft_count >= spacecraft_add_increment:
+            for _ in range(1):
+                spacecraft_coordinate.x = 190
+                spacecraft_rect = pygame.Rect(spacecraft_coordinate.x, height-spacecraft_height, spacecraft_width, spacecraft_height)
+                spacecrafts.append(spacecraft_rect)
+            spacecraft_count = 0
+            spacecraft_add_increment = max(2000, spacecraft_add_increment - 500)
+            spacecraft_vel = max(8, spacecraft_vel + 0.25)
+
+        for s in spacecrafts[:]:
+            s.y -= spacecraft_vel
+            if s.y < 0:
+                spacecrafts.remove(s)
+            elif alien_coordinate.colliderect(s):
+                hit = True
+                alien_coordinate.x = 0
+                alien_coordinate.y = height - alien_height
+
+        if hit:
+            crash_sound.play()
+            crash_count += 1
+            if total_coin > 0:
+                drop_sound.play()
+                total_coin = 0
+
         interaction_box = alien_coordinate.inflate(10, 10)
         if interaction_box.colliderect(shop_coordinate) and not received_battery and total_coin - battery_price >= 0:
             buying_sound.play()
             received_battery = True
             total_coin -= battery_price
             battery_price += 2
+
+        if crash_count == 10:
+            pygame.mixer.music.stop()
+            sad_end()
+            pygame.time.delay(3000)
+            run = False
 
         if interaction_box.colliderect(spaceship_coordinate) and received_battery:
             fixing_sound.play()
@@ -217,7 +308,7 @@ def main():
                 pygame.time.delay(3000)
                 run = False
 
-        draw(rotated_alien, coins, total_coin, battery_price, required_battery)
+        draw(rotated_alien, coins, total_coin, battery_price, required_battery, battleships, spacecrafts)
     pygame.quit()
 
 
