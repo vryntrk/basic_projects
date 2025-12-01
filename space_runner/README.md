@@ -7,5 +7,6 @@ You are an alien and late for work, but your spacecraft has run out of power. Yo
 HIGHLIGHTS
 Economic Difficulty: Battery prices increase with every purchase.
 Interactive World: You can interact with your spacecraft and the shop.
-Crash Limit: 10 crashes mean the game is over. You must be quick and careful at the same time.
+Crash Limit: 5 crashes mean the game is over. You must be quick and careful at the same time.
+Dynamic Life Bar: Every crash decreases the life level 20%.
 Directional Movement: The character rotates to face the direction of movement.
