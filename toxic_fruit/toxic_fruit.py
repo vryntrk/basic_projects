@@ -33,8 +33,6 @@ antidote = pygame.transform.scale(pygame.image.load("pictures/antidote.png"), (a
 
 eat_sound = pygame.mixer.Sound('sounds/eat.mp3')
 heal_sound = pygame.mixer.Sound('sounds/heal.mp3')
-pygame.mixer.music.load('sounds/background.mp3')
-pygame.mixer.music.play(-1, 0.0)
 
 
 def poisonous_fruit(apple_c, pear_c, banana_c):
@@ -204,12 +202,10 @@ def main():
         pygame.display.update()
 
         if apple_count == 0 and pear_count == 0 and banana_count == 0 and antidote_count >= 0:
-            pygame.mixer.music.stop()
             win_message()
             pygame.time.delay(3000)
             run = False
         if countdown <= 0:
-            pygame.mixer.music.stop()
             win.blit(screen_filter[0], (0, 0))
             death_message()
             pygame.time.delay(3000)
