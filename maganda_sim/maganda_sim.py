@@ -9,15 +9,15 @@ height = 1024
 
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Maganda Sim")
-icon = pygame.image.load("game.png")
+icon = pygame.image.load("pictures/game.png")
 pygame.display.set_icon(icon)
 
-background = pygame.transform.scale(pygame.image.load("road.png"), (width, height))
+background = pygame.transform.scale(pygame.image.load("pictures/road.png"), (width, height))
 
 car_width = 100
 car_height = 200
 car_vel = 8
-car = pygame.transform.scale(pygame.image.load("car.png"), (car_width, car_height))
+car = pygame.transform.scale(pygame.image.load("pictures/car.png"), (car_width, car_height))
 car_coordinate = car.get_rect()
 car_coordinate.x = (width - car_width) // 2
 car_coordinate.y = height - car_height
@@ -25,19 +25,19 @@ car_coordinate.y = height - car_height
 enemy_width = 100
 enemy_height = 200
 enemy_vel = 5
-enemy = pygame.transform.scale(pygame.image.load("enemy.png"), (enemy_width, enemy_height))
+enemy = pygame.transform.scale(pygame.image.load("pictures/enemy.png"), (enemy_width, enemy_height))
 enemy_coordinate = enemy.get_rect()
 
 broken_width = 100
 broken_height = 200
 broken_vel = 5
-broken = pygame.transform.scale(pygame.image.load("broken.png"), (broken_width, broken_height))
+broken = pygame.transform.scale(pygame.image.load("pictures/broken.png"), (broken_width, broken_height))
 broken_coordinate = broken.get_rect()
 
 font = pygame.font.SysFont("comic sans", 32)
 
-crash_sound = pygame.mixer.Sound("crash.mp3")
-pygame.mixer.music.load("background.mp3")
+crash_sound = pygame.mixer.Sound("sounds/crash.mp3")
+pygame.mixer.music.load("sounds/background.mp3")
 pygame.mixer.music.play(-1, 0.0)
 
 
@@ -150,7 +150,7 @@ def main():
             crash_sound.play()
             pygame.time.delay(150)
             game_over = font.render("Game Over!", 1, "White")
-            win.blit(game_over, ((width - game_over.get_width())/2, (height - game_over.get_height())/2))
+            win.blit(game_over, ((width - game_over.get_width()) // 2, (height - game_over.get_height()) // 2))
             pygame.display.update()
             pygame.time.delay(2000)
             break

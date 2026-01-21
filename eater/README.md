@@ -9,3 +9,9 @@ Growth Mechanism: Every 750 points, the shark physically grows in size.
 Life and Risk Management: Dodge the bombs and collect the hearts to survive.
 Dynamic Difficulty: As you play, bombs appear more frequently while hearts appear more rarely.
 Timed Objects: Food, bombs and  hearts disappear 5 seconds after appearing. You have to be fast.
+
+REQUIREMENTS
+Pygame Library
+
+CONTROLS
+Arrow keys

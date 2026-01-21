@@ -8,3 +8,9 @@ HIGHLIGHTS
 Appropriate Lane System: Obstacles don't just appear randomly. They follow a lane logic.
 High-tempo Gameplay: The game gets harder in direct proportion to the elapsed time.
 Infinite Loop: The road never ends unless you crash. (Trust me, it's harder than you think.)
+
+REQIREMENTS
+Pygame Library
+
+CONTROLS
+Right and left arrow keys

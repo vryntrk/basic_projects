@@ -60,18 +60,18 @@ battleship_mask = pygame.mask.from_surface(battleship)
 
 life_level_width = 100
 life_level_height = 100
-life0 = pygame.transform.scale(pygame.image.load("lives/life0.png"), (life_level_width, life_level_height))
-life1 = pygame.transform.scale(pygame.image.load("lives/life1.png"), (life_level_width, life_level_height))
-life2 = pygame.transform.scale(pygame.image.load("lives/life2.png"), (life_level_width, life_level_height))
-life3 = pygame.transform.scale(pygame.image.load("lives/life3.png"), (life_level_width, life_level_height))
-life4 = pygame.transform.scale(pygame.image.load("lives/life4.png"), (life_level_width, life_level_height))
-life5 = pygame.transform.scale(pygame.image.load("lives/life5.png"), (life_level_width, life_level_height))
+life0 = pygame.transform.scale(pygame.image.load("pictures/life0.png"), (life_level_width, life_level_height))
+life1 = pygame.transform.scale(pygame.image.load("pictures/life1.png"), (life_level_width, life_level_height))
+life2 = pygame.transform.scale(pygame.image.load("pictures/life2.png"), (life_level_width, life_level_height))
+life3 = pygame.transform.scale(pygame.image.load("pictures/life3.png"), (life_level_width, life_level_height))
+life4 = pygame.transform.scale(pygame.image.load("pictures/life4.png"), (life_level_width, life_level_height))
+life5 = pygame.transform.scale(pygame.image.load("pictures/life5.png"), (life_level_width, life_level_height))
 all_lives = [life0, life1, life2, life3, life4, life5]
 
 battery_width = 100
 battery_height = 100
-battery_on = pygame.transform.scale(pygame.image.load("batteries/battery_on.png"), (battery_width, battery_height))
-battery_off = pygame.transform.scale(pygame.image.load("batteries/battery_off.png"), (battery_width, battery_height))
+battery_on = pygame.transform.scale(pygame.image.load("pictures/battery_on.png"), (battery_width, battery_height))
+battery_off = pygame.transform.scale(pygame.image.load("pictures/battery_off.png"), (battery_width, battery_height))
 
 coin_sound = pygame.mixer.Sound("sounds/coin_receive.mp3")
 buying_sound = pygame.mixer.Sound("sounds/purchase.mp3")

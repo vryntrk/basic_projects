@@ -9,15 +9,15 @@ height = 1024
 
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Eater")
-icon = pygame.image.load("game.png")
+icon = pygame.image.load("pictures/game.png")
 pygame.display.set_icon(icon)
 
-background = pygame.transform.scale(pygame.image.load("sea.png"), (width, height))
+background = pygame.transform.scale(pygame.image.load("pictures/sea.png"), (width, height))
 
 hunter_width = 100
 hunter_height = 50
 hunter_vel = 4
-hunter_img = pygame.image.load("shark.png")
+hunter_img = pygame.image.load("pictures/shark.png")
 hunter = pygame.transform.scale(hunter_img, (hunter_width, hunter_height))
 hunter_coordinate = hunter.get_rect()
 hunter_coordinate.x = (width - hunter_width) // 2
@@ -25,30 +25,30 @@ hunter_coordinate.y = (height - hunter_height) // 2
 
 food_width = 60
 food_height = 30
-food_img = pygame.image.load("salmon.png")
+food_img = pygame.image.load("pictures/salmon.png")
 food = pygame.transform.scale(food_img, (food_width, food_height))
 food_coordinate = food.get_rect()
 
 bomb_width = 50
 bomb_height = 50
-bomb_img = pygame.image.load("bomb.png")
+bomb_img = pygame.image.load("pictures/bomb.png")
 bomb = pygame.transform.scale(bomb_img, (bomb_width, bomb_height))
 bomb_coordinate = bomb.get_rect()
 
 heal_width = 50
 heal_height = 50
-heal_img = pygame.image.load("heart.png")
+heal_img = pygame.image.load("pictures/heart.png")
 heal = pygame.transform.scale(heal_img, (heal_width, heal_height))
 heal_coordinate = heal.get_rect()
 
 font = pygame.font.SysFont("consolas", 32)
 
-eat_sound = pygame.mixer.Sound("eat.mp3")
-damage_sound = pygame.mixer.Sound("explosion.mp3")
-upgrade_sound = pygame.mixer.Sound("upgrade.mp3")
-heal_sound = pygame.mixer.Sound("heal.mp3")
+eat_sound = pygame.mixer.Sound("sounds/eat.mp3")
+damage_sound = pygame.mixer.Sound("sounds/explosion.mp3")
+upgrade_sound = pygame.mixer.Sound("sounds/upgrade.mp3")
+heal_sound = pygame.mixer.Sound("sounds/heal.mp3")
 
-pygame.mixer.music.load("background.mp3")
+pygame.mixer.music.load("sounds/background.mp3")
 pygame.mixer.music.play(-1, 0.0)
 
 

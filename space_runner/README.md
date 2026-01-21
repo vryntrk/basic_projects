@@ -10,3 +10,9 @@ Interactive World: You can interact with your spacecraft and the shop.
 Crash Limit: 5 crashes mean the game is over. You must be quick and careful at the same time.
 Dynamic Life Bar: Every crash decreases the life level 20%.
 Directional Movement: The character rotates to face the direction of movement.
+
+REQUIREMENTS
+Pygame Library
+
+CONTROLS
+Arrow keys

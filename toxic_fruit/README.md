@@ -10,3 +10,9 @@ Short Time Interval: You have to eat a fruit in 5 seconds, or you die. Also, if 
 Eating Lock System: You cannot eat fruit while being poisoned.
 Russian Roulette Mechanics: Every turn, poisonous fruit is randomly selected. Also, some turns all fruits might be safe.
 Dynamic Poisonous Fruit Ratio: At the beginning, poisonous fruit ratio is 75%. As you consume the fruits the ratio changes.
+
+REQUIREMENTS
+Pygame Library
+
+CONTROLS
+Keys 1 to 4 (keyboard or numpad)
