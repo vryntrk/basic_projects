@@ -1,16 +1,27 @@
 import pygame
 import time
 import random
+import ctypes
+import platform
+
+if platform.system() == "Windows":
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except:
+        try:
+            ctypes.windll.user32.SetProcessDPIAware()
+        except:
+            pass
 
 pygame.init()
 font = pygame.font.SysFont('elephant', 30)
 
-width = 1024
-height = 1024
+width = 800
+height = 800
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Toxic Fruit')
 
-icon = pygame.image.load('pictures/game.png')
+icon = pygame.image.load('pictures/logo.png')
 pygame.display.set_icon(icon)
 
 background = pygame.transform.scale(pygame.image.load("pictures/background.png"), (width, height))
@@ -33,6 +44,8 @@ antidote = pygame.transform.scale(pygame.image.load("pictures/antidote.png"), (a
 
 eat_sound = pygame.mixer.Sound('sounds/eat.mp3')
 heal_sound = pygame.mixer.Sound('sounds/heal.mp3')
+plus_sound = pygame.mixer.Sound('sounds/plus.mp3')
+shine_sound = pygame.mixer.Sound('sounds/shine.mp3')
 
 
 def poisonous_fruit(apple_c, pear_c, banana_c):
@@ -58,9 +71,7 @@ def fruit_object(picture, number):
 
     text_y = (HEIGHT - text.get_height()) // 2
     sticker.blit(text, (picture.get_width() + 10, text_y))
-
     return sticker
-
 
 
 def draw(apple_count, pear_count, banana_count, antidote_count, countdown):
@@ -95,18 +106,6 @@ def draw(apple_count, pear_count, banana_count, antidote_count, countdown):
     win.blit(time_text, ((width - time_text.get_width()) // 2, 100))
 
 
-def win_message():
-    message = font.render("Congrats, you ate all the fruits successfully!", True, (255, 255, 255), (0, 0, 0 ))
-    win.blit(message, ((width - message.get_width()) // 2, (height - message.get_height()) // 2))
-    pygame.display.update()
-
-
-def death_message():
-    message = font.render("You failed, you died!", True, (255, 255, 255), (0, 0, 0 ))
-    win.blit(message, ((width - message.get_width()) // 2, (height - message.get_height()) // 2))
-    pygame.display.update()
-
-
 def colorful_filter():
     red_filter = pygame.Surface((width, height))
     red_filter.fill((255, 0, 0))
@@ -126,6 +125,7 @@ def colorful_filter():
 
 def main():
     run = True
+    restart = False
 
     clock = pygame.time.Clock()
     start_time = time.time()
@@ -135,6 +135,9 @@ def main():
     pear_count = 5
     banana_count = 5
     antidote_count = 3
+    streak_counter = 0
+    mercy = ["E", "X", "T", "R", "A"]
+    extra = ""
 
     current_poison = poisonous_fruit(apple_count, pear_count, banana_count)
 
@@ -160,6 +163,9 @@ def main():
                     elif apple_count > 0 and not is_poisoned:
                         eat_sound.play()
                         apple_count -= 1
+                        streak_counter += 1
+                        extra += mercy[streak_counter - 1]
+                        shine_sound.play()
                         start_time = time.time()
                     current_poison = poisonous_fruit(apple_count, pear_count, banana_count)
 
@@ -170,6 +176,9 @@ def main():
                     elif pear_count > 0 and not is_poisoned:
                         eat_sound.play()
                         pear_count -= 1
+                        streak_counter += 1
+                        extra += mercy[streak_counter - 1]
+                        shine_sound.play()
                         start_time = time.time()
                     current_poison = poisonous_fruit(apple_count, pear_count, banana_count)
 
@@ -180,6 +189,9 @@ def main():
                     elif banana_count > 0 and not is_poisoned:
                         eat_sound.play()
                         banana_count -= 1
+                        streak_counter += 1
+                        extra += mercy[streak_counter - 1]
+                        shine_sound.play()
                         start_time = time.time()
                     current_poison = poisonous_fruit(apple_count, pear_count, banana_count)
 
@@ -195,23 +207,51 @@ def main():
                     current_poison = poisonous_fruit(apple_count, pear_count, banana_count)
 
         draw(apple_count, pear_count, banana_count, antidote_count, countdown)
+        reward = font.render(extra, True, (255, 255, 255))
+        win.blit(reward, (width - reward.get_width(), 100))
 
         if is_poisoned:
             win.blit(screen_filter[2], (0, 0))
+            streak_counter = 0
+            extra = ""
 
-        pygame.display.update()
 
-        if apple_count == 0 and pear_count == 0 and banana_count == 0 and antidote_count >= 0:
-            win_message()
-            pygame.time.delay(3000)
-            run = False
-        if countdown <= 0:
+        if streak_counter == 5:
+            plus_sound.play()
+            antidote_count += 1
+            streak_counter = 0
+            extra = ""
+
+        game_over = False
+        if apple_count == 0 and pear_count == 0 and banana_count == 0:
+            msg = "Forgiven! Press 'R' to restart or 'ESC' to quit."
+            game_over = True
+        elif countdown <= 0:
             win.blit(screen_filter[0], (0, 0))
-            death_message()
-            pygame.time.delay(3000)
-            run = False
+            msg = "You died! Press 'R' to restart or 'ESC' to quit."
+            game_over = True
 
+        if game_over:
+            text = font.render(msg, True, (255, 255, 255), (0, 0, 0))
+            win.blit(text, ((width - text.get_width()) // 2, height // 2))
+            pygame.display.update()
+
+            waiting = True
+            while waiting:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run, waiting = False, False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_r:
+                            restart, run, waiting = True, False, False
+                        if event.key == pygame.K_ESCAPE:
+                            run, waiting = False, False
+        else:
+            pygame.display.update()
+    return restart
+
+
+if __name__ == "__main__":
+    while True:
+        if not main(): break
     pygame.quit()
-
-
-main()
