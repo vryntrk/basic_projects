@@ -7,10 +7,19 @@ On the highway, people might be impatient. In Maganda Sim's universe, you are th
 HIGHLIGHTS
 Appropriate Lane System: Obstacles don't just appear randomly. They follow a lane logic.
 High-tempo Gameplay: The game gets harder in direct proportion to the elapsed time.
-Infinite Loop: The road never ends unless you crash. (Trust me, it's harder than you think.)
+Infinite Road: The road never ends unless you crash.
+Sliding Road: More realistic experience.
+Speedometer: You can see your speed on the right-top corner.
+Slow Motion: If you press down arrow key, when your speed is 5, slow motion will be activated for 3 seconds. 
 
-REQIREMENTS
+WARNING
+Holding down the speed keys will not work. You must press the key repeatedly to change your speed.
+
+REQUIREMENTS
 Pygame Library
 
 CONTROLS
-Right and left arrow keys
+Right arrow -> Moves right
+Left arrow -> Moves left
+Up arrow -> Speed up
+Down arrow -> Speed down / Activate slow motion
