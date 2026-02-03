@@ -23,3 +23,6 @@ Right arrow -> Moves right
 Left arrow -> Moves left
 Up arrow -> Speed up
 Down arrow -> Speed down / Activate slow motion
+M -> Turn on/off music
+R -> Restart the game
+ESC -> Quit the game

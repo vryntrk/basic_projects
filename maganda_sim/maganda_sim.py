@@ -29,8 +29,6 @@ car_width = 80
 car_height = 160
 car = pygame.transform.scale(pygame.image.load("pictures/car.png"), (car_width, car_height))
 car_coordinate = car.get_rect()
-car_coordinate.x = (width - car_width) // 2
-car_coordinate.y = height - car_height
 car_mask = pygame.mask.from_surface(car)
 
 enemy_width = 80
@@ -49,10 +47,19 @@ font = pygame.font.SysFont("comic sans", 32)
 
 crash_sound = pygame.mixer.Sound("sounds/crash.mp3")
 pygame.mixer.music.load("sounds/background.mp3")
-pygame.mixer.music.play(-1, 0.0)
 
 
-def draw(bg_y, enemies, broken_ones, elapsed_time, speed):
+def music_on():
+    music_on_text = font.render("Music On ('M')", 1, "White", "Black")
+    win.blit(music_on_text, ((width - music_on_text.get_width()) // 2, 10))
+
+
+def music_off():
+    music_off_text = font.render("Music Off ('M')", 1, "White", "Black")
+    win.blit(music_off_text, ((width - music_off_text.get_width()) // 2, 10))
+
+
+def draw(bg_y, enemies, broken_ones, elapsed_time, speed, music):
     win.blit(background, (0, bg_y))
     win.blit(background, (0, bg_y - height))
 
@@ -69,6 +76,11 @@ def draw(bg_y, enemies, broken_ones, elapsed_time, speed):
 
     speedometer = font.render(f"Speed: {speed}", 1, "White", "Black")
     win.blit(speedometer, ((790 - speedometer.get_width()), 10))
+
+    if music:
+        music_on()
+    else:
+        music_off()
 
 
 def columns():
@@ -94,8 +106,10 @@ def block():
     return selected_column
 
 
-
 def main():
+    car_coordinate.x = (width - car_width) // 2
+    car_coordinate.y = height - car_height
+
     run = True
     clock = pygame.time.Clock()
 
@@ -118,7 +132,14 @@ def main():
     slow_motion = False
     slow_motion_timer = 0
 
+    blue_filter = pygame.Surface((width, height))
+    blue_filter.fill((48, 213, 200))
+    blue_filter.set_alpha(100)
+
     hit = False
+    music = True
+    if music:
+        pygame.mixer.music.play(-1, 0.0)
 
     while run:
         dt = clock.tick(120)
@@ -136,7 +157,7 @@ def main():
                 run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    if background_speed < 10:
+                    if background_speed < 10 and not slow_motion:
                         background_speed += 1
                         broken_vel += 1
                         enemy_vel += 1
@@ -148,6 +169,12 @@ def main():
                     elif background_speed <= 5:
                         slow_motion = True
                         background_speed, broken_vel, enemy_vel, car_vel = 2, 2, 2, 2
+                if event.key == pygame.K_m:
+                    music = not music
+                    if music:
+                        pygame.mixer.music.play(-1, 0.0)
+                    else:
+                        pygame.mixer.music.stop()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and car_coordinate.left > 0:
@@ -156,7 +183,7 @@ def main():
             car_coordinate.x += car_vel
 
         if enemy_count > enemy_add_increment:
-            for _ in range(2):
+            for _ in range(3):
                 enemy_coordinate.x = columns()
                 enemy_rect = pygame.Rect(enemy_coordinate.x, -enemy_height, enemy_width, enemy_height)
                 enemies.append(enemy_rect)
@@ -191,14 +218,33 @@ def main():
             pygame.mixer.music.stop()
             crash_sound.play()
             pygame.time.delay(150)
-            game_over = font.render("Game Over!", 1, "White")
+            game_over = font.render("Game Over! Press 'R' to restart or 'ESC' to quit.", 1, "White", "Black")
             win.blit(game_over, ((width - game_over.get_width()) // 2, (height - game_over.get_height()) // 2))
             pygame.display.update()
             pygame.time.delay(2000)
+
+            waiting = True
+            while waiting:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        return False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_r:
+                            return True
+                        if event.key == pygame.K_ESCAPE:
+                            return False
             break
 
+        draw(background_y, enemies, broken_ones, elapsed_time, background_speed, music)
+
         if slow_motion:
+            text = font.render("Slow Motion Activated", 1, "White", "Black")
+            win.blit(blue_filter, (0, 0))
             slow_motion_timer += dt
+
+            if slow_motion_timer <= 500:
+                win.blit(text, ((width - text.get_width()) // 2, (height - text.get_height()) // 2))
+
             if slow_motion_timer >= 3000:
                 slow_motion = False
                 background_speed = 5
@@ -207,16 +253,11 @@ def main():
                 car_vel = 5
                 slow_motion_timer = 0
 
-        draw(background_y, enemies, broken_ones, elapsed_time, background_speed)
-
-        if slow_motion:
-            blue_filter = pygame.Surface((width, height))
-            blue_filter.fill((48, 213, 200))
-            blue_filter.set_alpha(100)
-            win.blit(blue_filter, (0, 0))
         pygame.display.update()
 
+
+if __name__ == "__main__":
+    playing = True
+    while playing:
+        playing = main()
     pygame.quit()
-
-
-main()
