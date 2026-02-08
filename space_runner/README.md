@@ -15,4 +15,7 @@ REQUIREMENTS
 Pygame Library
 
 CONTROLS
-Arrow keys
+Arrow keys -> Move
+M -> Turn on/off music
+R -> Restart the game
+ESC -> Quit the game
