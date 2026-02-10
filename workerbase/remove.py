@@ -82,7 +82,7 @@ def remove_worker():
                                                         continue
                                                     file.write(line)
 
-                                        print("Worker deleted successfully.")
+                                        print("Worker removed successfully.")
                                         run = False
 
                                     elif warn_message.title() == "N":

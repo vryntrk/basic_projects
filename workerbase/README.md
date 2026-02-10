@@ -10,8 +10,7 @@ At every step, it validates the input format. The worker is added to the file un
 1) Age must be between 18 and 99.
 2) Gender must be entered as 'male' or 'female'.
 ---EXTRAS---
-The function allows to add a name or surname consisting of more than one word (e.g. 'Wolfgang Amadeus',
-'Van Gogh').
+The function allows to add a name or surname consisting of more than one word (e.g. 'Wolfgang Amadeus', 'Van Gogh').
 
 *** find.py checks the file corruption and existence. If there is a problem it displays a warning.
 ---CATEGORIES---
@@ -25,7 +24,14 @@ The function allows to add a name or surname consisting of more than one word (e
 warns the user. User has to enter a part of the name of the worker which will be removed. Then, it
 displays appropriate ones on terminal and asks for worker's ID to remove the worker.
 ---EXTRAS---
-User could cancel the operation by typing 'cancel' at both the name and ID sections.
+User can cancel the operation by typing 'cancel' at both the name and ID sections.
+
+*** edit.py checks the file corruption and existence similar to 'find.py'. If there is a problem it
+warns the user. edit.py benefits from find.py to display the worker who being searching for. Also, it
+prevents data corruption. It takes worker's ID and asks for the field which will be changed. If
+there is no problem with rules the function updates the database file.
+---EXTRAS---
+User can cancel the operation by typing 'cancel' at ID section or by typing '5' at category section.
 
 REQUIREMENTS
 Pandas Library

@@ -1,6 +1,7 @@
 from add import add_worker
 from find import find_worker
 from remove import remove_worker
+from edit import edit_worker
 
 
 def menu():
@@ -8,8 +9,9 @@ def menu():
     print("1. Add Worker")
     print("2. Find Worker")
     print("3. Remove Worker")
-    print("4. Exit")
-    operation = input("Enter the operation number(1-4): ")
+    print("4. Edit Worker")
+    print("5. Exit")
+    operation = input("Enter the operation number(1-5): ")
     return operation
 
 
@@ -23,6 +25,8 @@ def main():
         elif choice == "3":
             remove_worker()
         elif choice == "4":
+            edit_worker()
+        elif choice == "5":
             run = True
             while run:
                 warning = input("Are you sure you want to exit?(Y/N): ")
