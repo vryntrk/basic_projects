@@ -26,3 +26,6 @@ Down arrow -> Speed down / Activate slow motion
 M -> Turn on/off music
 R -> Restart the game
 ESC -> Quit the game
+
+DOWNLOAD EXE
+Click [here](https://drive.google.com/drive/folders/1uBxyDYDVl57AbpUvapRHAf5neFXIBcQQ)

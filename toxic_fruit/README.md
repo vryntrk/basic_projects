@@ -25,3 +25,6 @@ CONTROLS
 4 (keyboard or numpad) -> drink antidote
 R -> restart the game
 ESC -> quit the game
+
+DOWNLOAD EXE
+Click [here](https://drive.google.com/drive/folders/1uBxyDYDVl57AbpUvapRHAf5neFXIBcQQ)
